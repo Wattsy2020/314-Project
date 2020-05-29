@@ -17,15 +17,11 @@ note these are as I understand them, feel free to discuss
 - The Professor has said as a direct quote "As this is a 3rd year assignment the requirements are somewhat vague to give you freedom" which means we have freedom with these requirements. So long as we follow these guidelines and develop a good project we should be fine.
 
 ## The Planned Product
-A tool that tests search functions of websites, specifically Ebay (though the specific website may change depending on the feasibility of web scraping). It is developed in python and uses metamorphic relations such as subsets (e.g. the results of a search with a price filter applied should be a subset of a search with no filter).
+A tool that tests the mathematical functions implemented by the popular python library NumPy. It tests a variety of domains such as linear algebra, trigonometry, statistics and others.
 
 ## Tools used
 - Python 3.x 
   - install from here https://www.python.org/downloads/
-- Beautiful soup 
-  - a python library for webscraping
-  - Introduction on how to use here https://www.dataquest.io/blog/web-scraping-tutorial-python/
-  - Install by entering the following command in command prompt (python is required) `pip install bs4`
-- Requests 
-  - a python library for creating http requests, also needed for webscraping
-  - install by entering the following command in command prompt `pip install requests`  
+- Numpy
+  - Introduction and documentation here https://numpy.org/doc/stable/user/whatisnumpy.html
+  - Install by entering the following command in command prompt (python is required) `pip install numpy`
