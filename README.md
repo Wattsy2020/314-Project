@@ -5,14 +5,14 @@ Group work assignment for CSIT314
 note these are as I understand them, feel free to discuss 
 
 - Design a tool to test a specific type of software or website
-  - No GUI, just results of testing multiple software of the same type e.g. multiple search engines
+  - No GUI, just results of testing a specific piece of software
   - Test many features of the software
-  - Use post and get commands to interact with websites?
 - Tool must Auto generate tests
 - Tool must Auto run tests
 - Tool must generate a report from automatic running of test
 - Tool must itself by developed using TDD i.e. unit tested
   - This is done through fuzzy testing?
+  - After further work this can be also done through Metamorphic relations e.g. for testing the assert_array_equals() function
 - Write report to outline how the tool works
 - The Professor has said as a direct quote "As this is a 3rd year assignment the requirements are somewhat vague to give you freedom" which means we have freedom with these requirements. So long as we follow these guidelines and develop a good project we should be fine.
 
