@@ -28,10 +28,10 @@ First we need to install git, download it here https://git-scm.com/downloads and
 To "clone" this repository (get it copied to your computer) open git bash, navigate to a directory you want to clone using the standard linux cd command then run the following commmand `git clone https://github.com/Wattsy2020/314-Project.git`
 
 Now you can make changes to the repository on your local machine, to have those changes be seen by everyone else perform the following (in git bash opened at the folder the repository is contained in)
-0. before anything else make sure you are on your own branch (otherwise the changes from 5 other people will overlap). A branch is a different version of the repository that can be later merged back into the master branch. read this https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging for more info about branches and how to create them
-1. `git add file_that_you_changed.py`   - this adds the changes to git
-2. `git commit -m "commit message"`     - this creates a "commit", basically new version of the repository with your new changes (make sure to leave a useful message so other can understand what the commit changed)
-3. `git push`                           - this uploads the changes so others can see
+1. before anything else make sure you are on your own branch (otherwise the changes from 5 other people will overlap). A branch is a different version of the repository that can be later merged back into the master branch. read this https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging for more info about branches and how to create them
+2. `git add file_that_you_changed.py`   - this adds the changes to git
+3. `git commit -m "commit message"`     - this creates a "commit", basically new version of the repository with your new changes (make sure to leave a useful message so other can understand what the commit changed)
+4. `git push`                           - this uploads the changes so others can see
 
 For people to actually see these changes they will have to be on your branch and type `git pull` which downloads all new changes.
 Branches can be merged into master using a pull request on the Github website.
