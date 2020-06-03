@@ -14,19 +14,39 @@ def assert_matrix_equals(X, Y, delta=0.0001):
     for i in range(X.shape[0]):
         for j in range(X.shape[1]):
             assert_delta(X[i, j], Y[i, j], delta)
-            
 
 # test the matrix inverse transformation using the property
 # that the inverse of an inverse matrix A^-1 is A
-# Note random matrix is not guarenteed to have an inverse, use psuedo invert instead?
 def test_inverse_1():
     d = randrange(1, 100)
     A = np.random.rand(d, d) # matrix must be square to invert
+    # regenerate matrix if it is singular (i.e. can't be inverted)
+    while np.linalg.matrix_rank(A) < A.shape[0]: 
+        A = np.random.rand(d, d)
+    
     B = np.linalg.inv(np.linalg.inv(A))
     assert_matrix_equals(A, B)
 
-# test matrix inverse using the property that I^-1 = I
+# inverse of matrix with 0 determinant should be undefined and throw an exception
 def test_inverse_2():
+    d = randrange(1, 100)
+    try: np.linalg.inv(np.zeros((d, d)))
+    except: pass
+    else: raise AssertionError("Inverse of a singular matrix is defined")
+
+# inverse of a non square matrix should be undefined
+def test_inverse_3():
+    a = randrange(1, 100)
+    b = randrange(1, 100)
+    while b == a: # generate b until it's different to a
+        b = randrange(1, 100)
+
+    try: np.linalg.inv(np.random.rand(a, b))
+    except: pass
+    else: raise AssertionError("Inverse of a non square matrix is defined")
+
+# test matrix inverse using the property that I^-1 = I
+def test_inverse_4():
     A = np.identity(randrange(1, 100))
     B = np.linalg.inv(A)
     assert_matrix_equals(A, B)
@@ -48,6 +68,8 @@ def run_tests():
     for i in range(100):
         test_inverse_1()
         test_inverse_2()
+        test_inverse_3()
+        test_inverse_4()
 
 # run tests on our functions such as assert_matrix_equals
 def test_testing_tool():
