@@ -3,7 +3,7 @@ from random import randrange
 
 # asserts that two values are equal within a delta
 def assert_delta(x, y, delta=0.0001):
-    assert abs(x - y) < delta, "x and y not equal"
+    assert abs(x - y) < delta, "x ({}) and y ({}) are not equal".format(x, y)
 
 # asserts every value of the matrix is equal (within a delta) elementwise
 def assert_matrix_equals(X, Y, delta=0.0001):

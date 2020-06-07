@@ -8,6 +8,11 @@ def run_tests():
         test_inverse_2()
         test_inverse_3()
         test_inverse_4()
+        
+        test_determinant_1()
+        test_determinant_2()
+        test_determinant_3()
+        test_determinant_4()
 
 # run tests on our functions such as assert_matrix_equals
 def test_testing_tool():
@@ -16,4 +21,6 @@ def test_testing_tool():
     
 if __name__ == '__main__':
     run_tests()
+    print("Numpy tests passed")
     test_testing_tool()
+    print("Utilities tests passed")
