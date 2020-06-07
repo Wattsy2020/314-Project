@@ -42,3 +42,7 @@ Branches can be merged into master using a pull request on the Github website.
 - Numpy
   - Introduction and documentation here https://numpy.org/doc/stable/user/whatisnumpy.html
   - Install by entering the following command in command prompt (python is required) `pip install numpy`
+- pytest
+  - A popular unit testing tool for python, allows you to automatically run tests and generate a report
+  - We use this to test our testing tool (see test_utilities.py)
+  - Install using the command `pip install pytest`
