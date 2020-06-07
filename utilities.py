@@ -1,5 +1,5 @@
-import pytest
 import numpy as np
+from random import randrange
 
 # asserts that two values are equal within a delta
 def assert_delta(x, y, delta=0.0001):
@@ -16,3 +16,25 @@ def assert_matrix_equals(X, Y, delta=0.0001):
     for i in range(X.shape[0]):
         for j in range(X.shape[1]):
             assert_delta(X[i, j], Y[i, j], delta)
+
+#square = True - creates a square matrix
+#non_square = True - creates a non-square rectangle
+#non_singular = True - creates a non singular matrix
+# a convenience function for generating different type of random matrices
+def gen_matrix(height_max, width_max, square = False, non_square = False, non_singular = False):
+    if square and non_square:
+        raise ValueError("Matrix cannot be square and non square")
+    if square and height_max != width_max:
+        raise ValueError("Max dimensions of a Square matrix must be the same")
+    if non_singular and not square:
+        raise ValueError("Singular matrices must be square")
+    
+    height = randrange(1, height_max)
+    width = height if square else randrange(1, width_max)
+    while non_square and height == width:
+        width = randrange(1, width_max)
+    
+    A = np.random.rand(height, width)
+    while non_singular and np.linalg.matrix_rank(A) < A.shape[0]: 
+        A = np.random.rand(height, width)
+    return A
