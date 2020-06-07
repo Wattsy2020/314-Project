@@ -16,8 +16,7 @@ def test_assert_delta_2():
 
 # test that assert_matrix_equals throws an AssertError for unequal matrices
 def test_assert_matrix_equals_1():
-    dims = randrange(1, 100), randrange(1, 100)
-    A = np.random.random_sample(dims)
+    A = gen_matrix(100, 100)
     B = A - randrange(1, 500)
     
     with pytest.raises(AssertionError):
