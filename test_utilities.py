@@ -1,7 +1,18 @@
 import pytest
 import numpy as np
-from random import randrange
+from random import randrange, random
 from utilities import assert_matrix_equals, assert_delta
+
+# test that assert_delta throws no error for 2 similar values
+def test_assert_delta_1():
+    a = random()
+    assert_delta(a, a + 0.00019*(random()-0.5), delta=0.0001)
+    
+# test assert delta throws assertion error for non similar values
+def test_assert_delta_2():
+    a = random()
+    with pytest.raises(AssertionError):
+        assert_delta(a, a + randrange(1, 100))
 
 # test that assert_matrix_equals throws an AssertError for unequal matrices
 def test_assert_matrix_equals_1():
@@ -9,7 +20,6 @@ def test_assert_matrix_equals_1():
     A = np.random.random_sample(dims)
     B = A - randrange(1, 500)
     
-    # assert that this raises an error
     with pytest.raises(AssertionError):
         assert_matrix_equals(A, B)
 

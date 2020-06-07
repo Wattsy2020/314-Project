@@ -1,6 +1,5 @@
 import pytest
 import numpy as np
-from random import randrange
 
 # asserts that two values are equal within a delta
 def assert_delta(x, y, delta=0.0001):
