@@ -13,6 +13,11 @@ def run_tests():
         test_determinant_2()
         test_determinant_3()
         test_determinant_4()
+        
+        test_rank_1()
+        test_rank_2()
+        test_rank_3()
+        test_rank_4()
 
 # run tests on our functions such as assert_matrix_equals
 def test_testing_tool():

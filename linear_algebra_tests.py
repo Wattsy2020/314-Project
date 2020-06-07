@@ -69,6 +69,9 @@ def test_determinant_2():
 def test_determinant_3():
     d = randrange(1, 50)
     A = np.random.rand(d, d)
+    # regenerate matrix if it is singular (i.e. can't be inverted)
+    while np.linalg.matrix_rank(A) < A.shape[0]: 
+        A = np.random.rand(d, d)
     B = np.linalg.inv(A)
     
     assert_delta(np.linalg.det(A), 1/np.linalg.det(B))
@@ -83,3 +86,46 @@ def test_determinant_4():
     try: np.linalg.det(np.random.rand(a, b))
     except: pass
     else: raise AssertionError("Determinant of a non square matrix is defined")
+
+# test the matrix_rank calculation using the property that swapping rows doesn't affect rank
+def test_rank_1():
+    height, width = randrange(1, 100), randrange(1, 100)
+    A = np.random.rand(height, width)
+    B = np.copy(A)
+    
+    # swap two random rows in B
+    row1, row2 = randrange(0, height), randrange(0, height)
+    B[[row1, row2]] = B[[row2, row1]]
+
+    assert np.linalg.matrix_rank(A) == np.linalg.matrix_rank(B), "ranks not equal"
+    
+# test the matrix_rank calculation using the property that
+# if one row is a linearly scaled version of the other the rank decreases by 1
+def test_rank_2():
+    height, width = randrange(1, 100), randrange(1, 100)
+    A = np.random.rand(height, width)
+    B = np.copy(A)
+    
+    # make one row = a linearly scaled version of another
+    row1, row2 = randrange(0, height), randrange(0, height)
+    B[row1, :] = random()*B[row2, :] + random()
+    
+    assert np.linalg.matrix_rank(A) == np.linalg.matrix_rank(B), "ranks not equal"
+
+# rank of the inverse matrix should be the same
+def test_rank_3():
+    d = randrange(1, 100)
+    A = np.random.rand(d, d)
+    # regenerate matrix if it is singular (i.e. can't be inverted)
+    while np.linalg.matrix_rank(A) < A.shape[0]: 
+        A = np.random.rand(d, d)
+    B = np.linalg.inv(A)
+    
+    assert np.linalg.matrix_rank(A) == np.linalg.matrix_rank(B), "ranks not equal"
+
+# the rank of a matrix <= number of rows
+def test_rank_4():
+    height, width = randrange(1, 100), randrange(1, 100)
+    A = np.random.rand(height, width)
+    
+    assert np.linalg.matrix_rank(A) <= A.shape[0], "rank is greater than number of rows"
