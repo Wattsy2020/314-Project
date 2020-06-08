@@ -29,6 +29,40 @@ def test_inverse_4():
     B = np.linalg.inv(A)
     assert_matrix_equals(A, B)
 
+
+
+# test the pseudo-inverse, an inverse that works for rectangular matrices
+# first test that the pseudo-inverse behaves likes the standard inverse for square matrices
+def test_pseudo_inverse_1():
+    A = gen_matrix(100, 100, square=True, non_singular=True)
+    B = np.linalg.pinv(np.linalg.pinv(A))
+    assert_matrix_equals(A, B)
+    
+# the below 4 tests are based on the properties the pseudo inverse has as described on wikipedia
+# here: https://en.wikipedia.org/wiki/Moore%E2%80%93Penrose_inverse#Definition
+def test_pseudo_inverse_2():
+    A = gen_matrix(100, 100)
+    B = np.linalg.pinv(A)
+    assert_matrix_equals(A, np.dot(np.dot(A, B), A))
+
+def test_pseudo_inverse_3():
+    A = gen_matrix(100, 100)
+    B = np.linalg.pinv(A)
+    assert_matrix_equals(B, np.dot(np.dot(B, A), B))
+
+def test_pseudo_inverse_4():
+    A = gen_matrix(100, 100)
+    B = np.linalg.pinv(A)
+    AB = np.dot(A, B)
+    assert_matrix_equals(AB, AB.T)
+
+def test_pseudo_inverse_5():
+    A = gen_matrix(100, 100)
+    B = np.linalg.pinv(A)
+    BA = np.dot(B, A)
+    assert_matrix_equals(BA, BA.T)
+
+
 # test determinant using the property that the absolute value
 # of it doesn’t change when rows are swapped
 # (determinant can flip signs depending on which rows are swapped)
@@ -67,6 +101,8 @@ def test_determinant_4():
     except: pass
     else: raise AssertionError("Determinant of a non square matrix is defined")
 
+
+
 # test the matrix_rank calculation using the property that swapping rows doesn't affect rank
 def test_rank_1():
     A = gen_matrix(100, 100)
@@ -100,3 +136,20 @@ def test_rank_3():
 def test_rank_4():
     A = gen_matrix(100, 100)
     assert np.linalg.matrix_rank(A) <= min(A.shape), "rank is greater than number of rows"
+    
+    
+
+# test transpose using the fact that A^T^T = A
+def test_transpose_1():
+    A = gen_matrix(100, 100)
+    assert_matrix_equals(A, A.T.T)
+
+# test transpose using the fact that it must swap the dimensions of a matrix
+def test_transpose_2():
+    A = gen_matrix(100, 100)
+    assert list(A.T.shape) == list(reversed(A.shape)), "Dimensions don't swap"
+    
+# test transpose using the fact that transposing a diagonal matrix doesn't change it
+def test_transpose_3():
+    A = np.identity(randrange(1, 100))
+    assert_matrix_equals(A, A.T)

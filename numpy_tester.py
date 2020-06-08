@@ -9,6 +9,12 @@ def run_tests():
         test_inverse_3()
         test_inverse_4()
         
+        test_pseudo_inverse_1()
+        test_pseudo_inverse_2()
+        test_pseudo_inverse_3()
+        test_pseudo_inverse_4()
+        test_pseudo_inverse_5()
+        
         test_determinant_1()
         test_determinant_2()
         test_determinant_3()
@@ -18,6 +24,10 @@ def run_tests():
         test_rank_2()
         test_rank_3()
         test_rank_4()
+
+        test_transpose_1()
+        test_transpose_2()
+        test_transpose_3()
     
 if __name__ == '__main__':
     run_tests()
