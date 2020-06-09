@@ -28,6 +28,10 @@ def run_tests():
         test_transpose_1()
         test_transpose_2()
         test_transpose_3()
+        
+        test_eigen_1()
+        test_eigen_2()
+        test_eigen_3()
     
 if __name__ == '__main__':
     run_tests()

@@ -160,31 +160,26 @@ def test_transpose_3():
 def test_eigen_1():
     A = gen_matrix(100, 100, square=True)
     # calculate the eigenvalues and sort them so we can compare (as eigenvalue are given in not necessarily the same order)
-    A_eigenvalue = np.sort(np.linalg.eig(A)[0])
-    AT_eigenvalue = np.sort(np.linalg.eig(A.T)[0])
+    A_eigenvalues = np.sort(np.linalg.eig(A)[0])
+    AT_eigenvalues = np.sort(np.linalg.eig(A.T)[0])
     
     # reshape into a 2 dimensional matrix so we can use assert_matrix_equals to compare
     shape = [A.shape[0], 1]
-    assert_matrix_equals(A_eigenvalue.reshape(shape), AT_eigenvalue.reshape(shape))
-
-# test eigenvector solving using the fact that the eigenvectors of A and A inverse are the same
-def test_eigen_2():
-    A = gen_matrix(100, 100, square=True)
-    # calculate the eigenvectors and values
-    A_eigenvalue, A_eigenvector = np.linalg.eig(A)
-    AI_eigenvalue, AI_eigenvector = np.linalg.eig(np.linalg.inv(A))
-    
-    # sort the eigenvectors using the fact that A_eigenvalue[i] is the corresponding
-    # eigenvalue for A_eigenvector[i]
-    # and also that the eigenvalues of A_inverse = 1/eigenvalues of A
-    A_eigenvector = A_eigenvector[np.argsort(A_eigenvalue)] # sort vectors how the values would be sorted
-    AI_sorting_order = np.array(list(reversed(np.argsort(A_eigenvalue)))) # needs to be reversed due to comment above
-    AI_eigenvector = AI_eigenvector[AI_sorting_order]
-    
-    assert_matrix_equals(A_eigenvector, AI_eigenvector)
+    assert_matrix_equals(A_eigenvalues.reshape(shape), AT_eigenvalues.reshape(shape))
 
 # test eigenvector and eigenvalue solving using the fact that they satisfy the property
 # Ax = lambda*x   (the property used to define what eigenvalues and vectors are)
-
-
-# assert that eigensolving only works on square matrices
+def test_eigen_2():
+    A = gen_matrix(100, 100, square=True)
+    eigenvalues, eigenvectors = np.linalg.eig(A)
+    # assert the property holds for each vector and value pair
+    Ax = np.dot(A, eigenvectors)
+    lx = eigenvalues.reshape(1, A.shape[0])*eigenvectors # multiply each eigenvalue by corresponding vector
+    assert_matrix_equals(Ax, lx)
+    
+# eigensolving should throw an exception for non square matrices
+def test_eigen_3():
+    A = gen_matrix(100, 100, non_square=True)
+    try: np.linalg.eig(A)
+    except: pass
+    else: raise AssertionError("Eigensolver should not be able to solve a non square matrix") 
