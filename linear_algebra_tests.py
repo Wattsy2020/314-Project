@@ -2,6 +2,47 @@ import numpy as np
 from random import randrange, random
 from utilities import assert_delta, assert_matrix_equals, gen_matrix
 
+# test multiplication using the fact A*Ainv = Identity
+def test_multiplication_1():
+    A = gen_matrix(100, 100, square=True)
+    B = np.linalg.inv(A)
+    dot = np.dot(A, B)
+    assert_matrix_equals(dot, np.identity(A.shape[0]))
+
+# test multiplication using the fact that (scalar*A)*A = scalar*(A*A)
+def test_multiplication_2():
+    A = gen_matrix(100, 100, square=True) # use square to make sure dimensions line up
+    scalar = random()*2 - 1
+    scalar_product = np.dot(scalar*A, A)
+    dot = scalar*np.dot(A, A)
+    assert_matrix_equals(scalar_product, dot)
+
+# test that the Identity functions as the multiplication identity
+def test_multiplication_3():
+    A = gen_matrix(100, 100, square=True)
+    I = np.identity(A.shape[0])
+    dot = np.dot(I, np.dot(A, I)) # IAI should = A
+    assert_matrix_equals(dot, A)
+    
+# test that multiplication works for non square matrices using A_pinv*A*A.T=A.T
+def test_multiplication_4():
+    A = gen_matrix(100, 100, non_square=True, non_singular=True)
+    A_inv = np.linalg.pinv(A)
+    dot = np.dot(A_inv, np.dot(A, A.T)) # note all matrices are non square
+    assert_matrix_equals(dot, A.T)
+
+# test that multiplication fails for matrices with incorrect dimensions
+def test_multiplication_5():
+    A = gen_matrix(100, 100)
+    B = np.copy(A)
+    # add extra rows of zeros to B
+    zeros = np.zeros((A.shape[1] + randrange(1, 100), B.shape[1]))
+    B = np.concatenate((B, zeros))
+    # assert valueerror is raised
+    try: np.dot(A, B)
+    except ValueError: pass
+    else: raise AssertionError("Multiplication of incompatible matrices is defined")
+
 # test the matrix inverse transformation using the property
 # that the inverse of an inverse matrix A^-1 is A
 def test_inverse_1():

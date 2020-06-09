@@ -4,6 +4,12 @@ from utilities import *
 # note in future needs to record and print number of failures and where
 def run_tests():
     for i in range(100):
+        test_multiplication_1()
+        test_multiplication_2()
+        test_multiplication_3()
+        test_multiplication_4()
+        test_multiplication_5()
+        
         test_inverse_1()
         test_inverse_2()
         test_inverse_3()
