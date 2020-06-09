@@ -8,12 +8,42 @@ def run_tests():
         test_inverse_2()
         test_inverse_3()
         test_inverse_4()
+        
+        test_pseudo_inverse_1()
+        test_pseudo_inverse_2()
+        test_pseudo_inverse_3()
+        test_pseudo_inverse_4()
+        test_pseudo_inverse_5()
+        
+        test_determinant_1()
+        test_determinant_2()
+        test_determinant_3()
+        test_determinant_4()
+        
+        test_rank_1()
+        test_rank_2()
+        test_rank_3()
+        test_rank_4()
 
-# run tests on our functions such as assert_matrix_equals
-def test_testing_tool():
-    for i in range(100):
-        test_assert_matrix_equals()
+        test_transpose_1()
+        test_transpose_2()
+        test_transpose_3()
+        
+        test_eigen_1()
+        test_eigen_2()
+        test_eigen_3()
+        
+        test_norm_1()
+        test_norm_2()
+        test_norm_3()
+        test_norm_4()
+        
+        test_solve_1()
+        test_solve_2()
+        test_solve_3()
+        test_solve_4()
+        test_solve_5()
     
 if __name__ == '__main__':
     run_tests()
-    test_testing_tool()
+    print("Numpy tests passed")
