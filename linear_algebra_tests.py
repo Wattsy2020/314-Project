@@ -63,13 +63,14 @@ def test_pseudo_inverse_5():
     assert_matrix_equals(BA, BA.T)
 
 
+
 # test determinant using the property that the absolute value
 # of it doesn’t change when rows are swapped
 # (determinant can flip signs depending on which rows are swapped)
 def test_determinant_1():
     # determinant can become quite large for large matrices
     # throwing off assert_delta, so the dimension must be restricted to 50
-    A = gen_matrix(50, 50, square=True)
+    A = gen_matrix(25, 25, square=True)
     B = np.copy(A)
     
     # swap two random rows in B
@@ -80,7 +81,7 @@ def test_determinant_1():
 
 # test determinant using the property that it scales by A when a row is multiplied by A
 def test_determinant_2():
-    A = gen_matrix(50, 50, square=True)
+    A = gen_matrix(25, 25, square=True)
     B = np.copy(A)
     scale_factor = random()
     B[randrange(0, B.shape[0]), :] *= scale_factor # scale a random row by scale_factor
@@ -90,13 +91,13 @@ def test_determinant_2():
 # test determinant using the property that if the determinant of a matrix is
 # A then determinant of the inverse is 1/A
 def test_determinant_3():
-    A = gen_matrix(50, 50, square=True, non_singular=True)
+    A = gen_matrix(25, 25, square=True, non_singular=True)
     B = np.linalg.inv(A)
     assert_delta(np.linalg.det(A), 1/np.linalg.det(B))
 
 # test that determinant fails for non square matrix
 def test_determinant_4():
-    A = gen_matrix(50, 50, non_square=True)
+    A = gen_matrix(25, 25, non_square=True)
     try: np.linalg.det(A)
     except: pass
     else: raise AssertionError("Determinant of a non square matrix is defined")
@@ -183,3 +184,31 @@ def test_eigen_3():
     try: np.linalg.eig(A)
     except: pass
     else: raise AssertionError("Eigensolver should not be able to solve a non square matrix") 
+    
+    
+    
+# test the (frobenius) norm of a matrix, norm = sqrt(sum of squares of all values in the matrix)
+# first using the fact it shouldn't change for the transpose of a matrix
+def test_norm_1():
+    A = gen_matrix(100, 100)
+    assert_delta(np.linalg.norm(A), np.linalg.norm(A.T))
+    
+# second use the fact that when the matrix is scaled by a scalar B the norm should also be scaled by abs(B)
+def test_norm_2():
+    A = gen_matrix(100, 100)
+    scalar = random()*2 - 1 # random number on interval [-1, 1]
+    assert_delta(np.linalg.norm(scalar*A), abs(scalar)*np.linalg.norm(A))
+    
+# the norm should always be >= 0
+def test_norm_3():
+    A = gen_matrix(100, 100)
+    assert np.linalg.norm(A) >= 0
+    
+# As https://mathworld.wolfram.com/MatrixNorm.html points out the above properties are met
+# by any matrix norm, not specifically the frobenius norm, this test ensures that the frobenius norm
+# is being calculated using the fact that 
+# norm(aI) = sqrt(a^2 + a^2 + ... a^2) = sqrt(I.shape*a^2) = abs(a)*sqrt(I.shape)
+def test_norm_4():
+    I = np.identity(randrange(1, 100))
+    a = random()*2 - 1
+    assert_delta(np.linalg.norm(a*I), np.abs(a)*np.sqrt(I.shape[0])) 

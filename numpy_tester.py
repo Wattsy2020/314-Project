@@ -32,6 +32,11 @@ def run_tests():
         test_eigen_1()
         test_eigen_2()
         test_eigen_3()
+        
+        test_norm_1()
+        test_norm_2()
+        test_norm_3()
+        test_norm_4()
     
 if __name__ == '__main__':
     run_tests()
