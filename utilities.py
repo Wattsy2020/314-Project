@@ -26,8 +26,6 @@ def gen_matrix(height_max, width_max, square = False, non_square = False, non_si
         raise ValueError("Matrix cannot be square and non square")
     if square and height_max != width_max:
         raise ValueError("Max dimensions of a Square matrix must be the same")
-    if non_singular and not square:
-        raise ValueError("Singular matrices must be square")
     
     height = randrange(1, height_max)
     width = height if square else randrange(1, width_max)
@@ -35,6 +33,6 @@ def gen_matrix(height_max, width_max, square = False, non_square = False, non_si
         width = randrange(1, width_max)
     
     A = np.random.rand(height, width)*2 - 1 # each entry is a random number in [-1, 1]
-    while non_singular and np.linalg.matrix_rank(A) < A.shape[0]: 
+    while non_singular and np.linalg.matrix_rank(A) < min(A.shape): 
         A = np.random.rand(height, width)*2 - 1
     return A
