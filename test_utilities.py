@@ -90,7 +90,7 @@ def test_gen_matrix_6():
 # throws ValueError when non_singular is true but square is false
 def test_gen_matrix_7():
     with pytest.raises(ValueError):
-        A = gen_matrix(randrange(2, 100), randrange(2, 100), non_singular=True)
+        gen_matrix(randrange(2, 100), randrange(2, 100), non_singular=True)
     
     
 if __name__ == '__main__':
