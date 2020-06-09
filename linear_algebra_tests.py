@@ -13,14 +13,14 @@ def test_inverse_1():
 def test_inverse_2():
     d = randrange(1, 100)
     try: np.linalg.inv(np.zeros((d, d)))
-    except: pass
+    except np.linalg.LinAlgError: pass
     else: raise AssertionError("Inverse of a singular matrix is defined")
 
 # inverse of a non square matrix should be undefined
 def test_inverse_3():
     A = gen_matrix(100, 100, non_square=True)
     try: np.linalg.inv(A)
-    except: pass
+    except np.linalg.LinAlgError: pass
     else: raise AssertionError("Inverse of a non square matrix is defined")
 
 # test matrix inverse using the property that I^-1 = I
@@ -99,7 +99,7 @@ def test_determinant_3():
 def test_determinant_4():
     A = gen_matrix(25, 25, non_square=True)
     try: np.linalg.det(A)
-    except: pass
+    except np.linalg.LinAlgError: pass
     else: raise AssertionError("Determinant of a non square matrix is defined")
 
 
@@ -182,7 +182,7 @@ def test_eigen_2():
 def test_eigen_3():
     A = gen_matrix(100, 100, non_square=True)
     try: np.linalg.eig(A)
-    except: pass
+    except np.linalg.LinAlgError: pass
     else: raise AssertionError("Eigensolver should not be able to solve a non square matrix") 
     
     
@@ -206,9 +206,53 @@ def test_norm_3():
     
 # As https://mathworld.wolfram.com/MatrixNorm.html points out the above properties are met
 # by any matrix norm, not specifically the frobenius norm, this test ensures that the frobenius norm
-# is being calculated using the fact that 
+# is being calculated using the fact that the norm of a diagonal matrix can be calculates as below 
 # norm(aI) = sqrt(a^2 + a^2 + ... a^2) = sqrt(I.shape*a^2) = abs(a)*sqrt(I.shape)
 def test_norm_4():
     I = np.identity(randrange(1, 100))
     a = random()*2 - 1
     assert_delta(np.linalg.norm(a*I), np.abs(a)*np.sqrt(I.shape[0])) 
+
+
+
+# test the linalg.solve(A, b) which solves for x in the equation Ax = b
+# linalg.solve(A, Identity) and linalg.solve(Identity, A) should be the inverse of each other
+# as you can transform Ax = I by multiplying by x_inv to see A = Ix_inv i.e. Ix_inv = A
+def test_solve_1():
+    A = gen_matrix(100, 100, square=True)
+    I = np.identity(A.shape[0])
+    X1 = np.linalg.solve(A, I)
+    X2 = np.linalg.solve(I, A)
+    assert_matrix_equals(X1, np.linalg.inv(X2))
+
+# linalg.solve(Identity, random_vector) should give x = random_vector
+def test_solve_2():
+    vector = gen_matrix(100, 2) # generates a random vector with size randrange(1, 100), 1
+    X = np.linalg.solve(np.identity(vector.shape[0]), vector)
+    assert_matrix_equals(X, vector)
+
+# linalg.solve(A, Ainverse) should give x = (Ainverse)^2
+def test_solve_3():
+    A = gen_matrix(100, 100, square=True)
+    Ainv = np.linalg.inv(A)
+    X = np.linalg.solve(A, Ainv)
+    assert_matrix_equals(X, np.dot(Ainv, Ainv))
+
+# check that it fails for non square matrices
+def test_solve_4():
+    A = gen_matrix(100, 100, non_square=True)
+    try: np.linalg.solve(A, A)
+    except np.linalg.LinAlgError: pass
+    else: raise AssertionError("Solver should not solve for non-square matrices")
+
+# check that it fails for incorrect dimensions e.g. if A is X by X but b is 2*X by 1
+def test_solve_5():
+    A = gen_matrix(10, 10, square=True)
+    B = gen_matrix(100, 2)
+    # ensure that B has more rows than A
+    while B.shape[0] <= A.shape[0]:
+        B = gen_matrix(100, 2)
+        
+    try: np.linalg.solve(A, B)
+    except ValueError: pass
+    else: raise AssertionError("Solve should not solve for incorrect dimensions")

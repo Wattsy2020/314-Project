@@ -37,6 +37,12 @@ def run_tests():
         test_norm_2()
         test_norm_3()
         test_norm_4()
+        
+        test_solve_1()
+        test_solve_2()
+        test_solve_3()
+        test_solve_4()
+        test_solve_5()
     
 if __name__ == '__main__':
     run_tests()

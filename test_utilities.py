@@ -14,6 +14,8 @@ def test_assert_delta_2():
     with pytest.raises(AssertionError):
         assert_delta(a, a + randrange(1, 100))
 
+
+
 # test that assert_matrix_equals throws an AssertError for unequal matrices
 def test_assert_matrix_equals_1():
     A = gen_matrix(100, 100)
@@ -45,6 +47,8 @@ def test_assert_matrix_equals_4():
 
     with pytest.raises(ValueError):
         assert_matrix_equals(A, A)
+
+
 
 # with no extra parameters, generates a 2d matrix  with dimensions in range
 def test_gen_matrix_1():
