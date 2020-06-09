@@ -151,5 +151,40 @@ def test_transpose_2():
     
 # test transpose using the fact that transposing a diagonal matrix doesn't change it
 def test_transpose_3():
-    A = np.identity(randrange(1, 100))
+    A = np.identity(randrange(1, 100))*random()
     assert_matrix_equals(A, A.T)
+    
+
+
+# test eigenvalue solving using the fact that the eigenvalues of A and A.T are the same
+def test_eigen_1():
+    A = gen_matrix(100, 100, square=True)
+    # calculate the eigenvalues and sort them so we can compare (as eigenvalue are given in not necessarily the same order)
+    A_eigenvalue = np.sort(np.linalg.eig(A)[0])
+    AT_eigenvalue = np.sort(np.linalg.eig(A.T)[0])
+    
+    # reshape into a 2 dimensional matrix so we can use assert_matrix_equals to compare
+    shape = [A.shape[0], 1]
+    assert_matrix_equals(A_eigenvalue.reshape(shape), AT_eigenvalue.reshape(shape))
+
+# test eigenvector solving using the fact that the eigenvectors of A and A inverse are the same
+def test_eigen_2():
+    A = gen_matrix(100, 100, square=True)
+    # calculate the eigenvectors and values
+    A_eigenvalue, A_eigenvector = np.linalg.eig(A)
+    AI_eigenvalue, AI_eigenvector = np.linalg.eig(np.linalg.inv(A))
+    
+    # sort the eigenvectors using the fact that A_eigenvalue[i] is the corresponding
+    # eigenvalue for A_eigenvector[i]
+    # and also that the eigenvalues of A_inverse = 1/eigenvalues of A
+    A_eigenvector = A_eigenvector[np.argsort(A_eigenvalue)] # sort vectors how the values would be sorted
+    AI_sorting_order = np.array(list(reversed(np.argsort(A_eigenvalue)))) # needs to be reversed due to comment above
+    AI_eigenvector = AI_eigenvector[AI_sorting_order]
+    
+    assert_matrix_equals(A_eigenvector, AI_eigenvector)
+
+# test eigenvector and eigenvalue solving using the fact that they satisfy the property
+# Ax = lambda*x   (the property used to define what eigenvalues and vectors are)
+
+
+# assert that eigensolving only works on square matrices
