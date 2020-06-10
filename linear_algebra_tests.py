@@ -2,6 +2,33 @@ import numpy as np
 from random import randrange, random
 from utilities import assert_delta, assert_matrix_equals, gen_matrix
 
+# test matrix addition using A-A = 0
+def test_addition_1():
+    A = gen_matrix(100, 100)
+    O = np.zeros(A.shape)  # additive inverse (zero matrix of the same dimensions as A)
+    assert_matrix_equals(np.add(A, -A), O)
+
+# test that matrix addition is commutative
+def test_addition_2():
+    A = gen_matrix(100, 100)
+    B = random()*A + random() # make B based on A so that dimensions fit
+    assert_matrix_equals(np.add(A, B), np.add(B, A))
+
+# test that matrix addition fails for incorrect dimensions
+def test_addition_3():
+    A = gen_matrix(100, 100)
+    B = gen_matrix(100, 100)
+    # need to ensure that A and B have different dimensions, and none of the dimensions are 1
+    # otherwise numpy "Broadcasts" which isn't true matrix addition but is defined and is intended functionality
+    while B.shape == A.shape or min(A.shape) == 1 or min(B.shape) == 1: 
+        A = gen_matrix(100, 100)
+        B = gen_matrix(100, 100)
+    try: np.add(A, B)
+    except ValueError: pass
+    else: raise AssertionError("Addition is defined for matrixes with dimensions {} and {}".format(A.shape, B.shape))
+        
+    
+
 # test multiplication using the fact A*Ainv = Identity
 def test_multiplication_1():
     A = gen_matrix(100, 100, square=True)
