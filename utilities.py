@@ -27,8 +27,8 @@ def gen_matrix(height_max, width_max, square = False, non_square = False, non_si
     if square and height_max != width_max:
         raise ValueError("Max dimensions of a Square matrix must be the same")
     
-    height = randrange(1, height_max)
-    width = height if square else randrange(1, width_max)
+    height = randrange(1, height_max + 1)
+    width = height if square else randrange(1, width_max + 1)
     while non_square and height == width:
         width = randrange(1, width_max)
     

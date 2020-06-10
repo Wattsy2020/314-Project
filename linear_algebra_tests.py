@@ -4,19 +4,22 @@ from utilities import assert_delta, assert_matrix_equals, gen_matrix
 
 # test matrix addition using A-A = 0
 def test_addition_1():
-    A = gen_matrix(5, 5)
+    A = gen_matrix(100, 100)
     O = np.zeros(A.shape)  # additive inverse (zero matrix of the same dimensions as A)
     result = np.add(A, -A)
     assert_matrix_equals(result, O)
-    # all test functions return output of the correct test case
-    # so we can print it in the auto generating report and use it as evidence in our written Report
-    return "{}\n-\n{}\n=\n{}".format(A, A, result) 
 
 # test that matrix addition is commutative
 def test_addition_2():
-    A = gen_matrix(100, 100)
+    A = gen_matrix(5, 5)
     B = random()*A + random() # make B based on A so that dimensions fit
-    assert_matrix_equals(np.add(A, B), np.add(B, A))
+    add1 = np.add(A, B)
+    add2 = np.add(B, A)
+    assert_matrix_equals(add1, add2)
+    # some test functions return output of the correct test case
+    # so we can use it as evidence in our written Report
+    return """A =\n{}\nB =\n{}\nA + B =\n{}\nB + A =\n{}\n
+Addition is commutative so test passed""".format(A, B, add1, add2) 
     
 
 # test that matrix addition fails for incorrect dimensions
@@ -309,8 +312,9 @@ def test_solve_1():
     X2 = np.linalg.solve(I, A)
     X2_inv = np.linalg.inv(X2)
     assert_matrix_equals(X1, X2_inv)
-    return """Solution of Ax = I:\n{}\nSolution of Ix = A:\n{}\nInverse of solution to Ix = A:\n{}\n
-The solution to the first and inverse solution to the second are equal hence test passes""".format(X1, X2, X2_inv)
+    return """A = \n{}\nI = \n{}
+Solution of Ax = I:\n{}\nSolution of Ix = A:\n{}\nInverse of solution to Ix = A:\n{}\n
+The solution to the first and inverse solution to the second are equal hence test passes""".format(A, I, X1, X2, X2_inv)
 
 # linalg.solve(Identity, random_vector) should give x = random_vector
 def test_solve_2():

@@ -11,7 +11,7 @@ def run_tests(module, show_examples=False):
     module_name = list(filter(lambda x: x[0][:8] == "__name__", members))[0][1]
     
     # loop through and run each test 100 times
-    print("Testing {}.py\n".format(module_name))
+    print("Testing {} functions found in {}.py\n".format(len(test_functions), module_name))
     print("{0: <30}Status".format("Test Name"))
     for name, function in test_functions:
         print("{0: <30}".format(name), end="")
@@ -34,7 +34,7 @@ def run_tests(module, show_examples=False):
             print()
     
 if __name__ == "__main__":
-    run_tests(linear_algebra_tests, show_examples=True)
+    run_tests(linear_algebra_tests) # show_example=True will also print the examples
     print()
     run_tests(sqrt_tests)
     print()
