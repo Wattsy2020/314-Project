@@ -32,7 +32,7 @@ def gen_matrix(height_max, width_max, square = False, non_square = False, non_si
     while non_square and height == width:
         width = randrange(1, width_max)
     
-    A = np.random.rand(height, width)*2 - 1 # each entry is a random number in [-1, 1]
+    A = np.random.uniform(-1, 1, (height, width)) # each entry is a random number in [-1, 1]
     while non_singular and np.linalg.matrix_rank(A) < min(A.shape): 
         A = np.random.rand(height, width)*2 - 1
     return A
