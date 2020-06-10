@@ -1,5 +1,7 @@
 import inspect
 import linear_algebra_tests
+import sqrt_tests
+import trigonometry_tests
 
 # note in future needs to record and print number of failures and where
 def run_tests(module):
@@ -23,3 +25,7 @@ def run_tests(module):
     
 if __name__ == "__main__":
     run_tests(linear_algebra_tests)
+    print()
+    run_tests(sqrt_tests)
+    print()
+    run_tests(trigonometry_tests)

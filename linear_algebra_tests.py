@@ -26,8 +26,8 @@ def test_addition_3():
     try: np.add(A, B)
     except ValueError: pass
     else: raise AssertionError("Addition is defined for matrixes with dimensions {} and {}".format(A.shape, B.shape))
-        
-    
+
+
 
 # test multiplication using the fact A*Ainv = Identity
 def test_multiplication_1():
