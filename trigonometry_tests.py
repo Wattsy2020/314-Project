@@ -7,16 +7,28 @@ from utilities import assert_delta
 def test_sin():
     x = random.random()
     assert_delta((np.sin(x*np.pi)),(np.sin((x*np.pi)+(2*np.pi))))
+    return "sin({})={}\nsin(2pi+{})={}\n{}".format(x*np.pi, 
+    round(np.sin(x*np.pi),6), x*np.pi, 
+    round(np.sin((x*np.pi)+2*np.pi),6), 
+    "They are equal so the test passes")
 
 # assert cos(x)==cos(2pi+x)
 def test_cos():
     x = random.random()
     assert_delta((np.cos(x * np.pi)),(np.cos(x*np.pi+(2*np.pi))))
+    return "cos({})={}\ncos(2pi+{})={}\n{}".format(x*np.pi, 
+    round(np.cos(x*np.pi),6), x*np.pi, 
+    round(np.cos((x*np.pi)+2*np.pi),6), 
+    "They are equal so the test passes")
 
 # assert tan(x)==tan(2pi+x)
 def test_tan():
     x = random.random()
     assert_delta((np.tan(x*np.pi)),(np.tan(x*np.pi+(2*np.pi))))
+    return "tan({})={}\ntan(2pi+{})={}\n{}".format(x*np.pi, 
+    round(np.tan(x*np.pi),6), x*np.pi, 
+    round(np.tan((x*np.pi)+2*np.pi),6), 
+    "They are equal so the test passes")
 
 # assert sin(x)==-sin(2pi-x)
 def test_metaSin():
