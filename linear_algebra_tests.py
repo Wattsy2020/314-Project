@@ -4,15 +4,20 @@ from utilities import assert_delta, assert_matrix_equals, gen_matrix
 
 # test matrix addition using A-A = 0
 def test_addition_1():
-    A = gen_matrix(100, 100)
+    A = gen_matrix(5, 5)
     O = np.zeros(A.shape)  # additive inverse (zero matrix of the same dimensions as A)
-    assert_matrix_equals(np.add(A, -A), O)
+    result = np.add(A, -A)
+    assert_matrix_equals(result, O)
+    # all test functions return output of the correct test case
+    # so we can print it in the auto generating report and use it as evidence in our written Report
+    return "{}\n-\n{}\n=\n{}".format(A, A, result) 
 
 # test that matrix addition is commutative
 def test_addition_2():
     A = gen_matrix(100, 100)
     B = random()*A + random() # make B based on A so that dimensions fit
     assert_matrix_equals(np.add(A, B), np.add(B, A))
+    
 
 # test that matrix addition fails for incorrect dimensions
 def test_addition_3():
@@ -79,9 +84,11 @@ def test_inverse_1():
 
 # inverse of matrix with 0 determinant should be undefined and throw an exception
 def test_inverse_2():
-    d = randrange(1, 100)
-    try: np.linalg.inv(np.zeros((d, d)))
-    except np.linalg.LinAlgError: pass
+    d = randrange(2, 5)
+    zeros = np.zeros((d, d))
+    try: np.linalg.inv(zeros)
+    except np.linalg.LinAlgError:
+        return "Inverse of the following singular matrix is not defined:\n{}\n".format(zeros)
     else: raise AssertionError("Inverse of a singular matrix is defined")
 
 # inverse of a non square matrix should be undefined
@@ -119,10 +126,13 @@ def test_pseudo_inverse_3():
     assert_matrix_equals(B, np.dot(np.dot(B, A), B))
 
 def test_pseudo_inverse_4():
-    A = gen_matrix(100, 100)
+    A = gen_matrix(5, 5, non_square=True) # force it to be non square for reporting purposes
     B = np.linalg.pinv(A)
     AB = np.dot(A, B)
     assert_matrix_equals(AB, AB.T)
+    return """A =\n{}\nA_pseudoinverse =\n{}\nA*A_pinv =\n{}\nTranspose of A*A_pinv =\n{}\n
+i.e. A*A_pinv is hermitian (equal to it's own transpose), a required property of
+the psuedo inverse, so the test passes""".format(A, B, AB, AB.T)
 
 def test_pseudo_inverse_5():
     A = gen_matrix(100, 100)
@@ -165,9 +175,10 @@ def test_determinant_3():
 
 # test that determinant fails for non square matrix
 def test_determinant_4():
-    A = gen_matrix(25, 25, non_square=True)
+    A = gen_matrix(5, 5, non_square=True)
     try: np.linalg.det(A)
-    except np.linalg.LinAlgError: pass
+    except np.linalg.LinAlgError: 
+        return "Determinant of the following non square matrix is not defined:\n{}".format(A)
     else: raise AssertionError("Determinant of a non square matrix is defined")
 
 
@@ -277,21 +288,29 @@ def test_norm_3():
 # is being calculated using the fact that the norm of a diagonal matrix can be calculates as below 
 # norm(aI) = sqrt(a^2 + a^2 + ... a^2) = sqrt(I.shape*a^2) = abs(a)*sqrt(I.shape)
 def test_norm_4():
-    I = np.identity(randrange(1, 100))
     a = random()*2 - 1
-    assert_delta(np.linalg.norm(a*I), np.abs(a)*np.sqrt(I.shape[0])) 
-
+    dim = randrange(1, 5)
+    diag = np.identity(dim)*a
+    norm = np.linalg.norm(diag)
+    assert_delta(norm, np.abs(a)*np.sqrt(dim)) 
+    return """A =\n{}\n|a|*sqrt(dimension) = |{}|*sqrt({}) = {}\nNorm = {} 
+They are equal so the test passes""".format(diag, a, dim, np.abs(a)*np.sqrt(dim), norm)
+    
 
 
 # test the linalg.solve(A, b) which solves for x in the equation Ax = b
 # linalg.solve(A, Identity) and linalg.solve(Identity, A) should be the inverse of each other
 # as you can transform Ax = I by multiplying by x_inv to see A = Ix_inv i.e. Ix_inv = A
+# which means if x1 is a solution to Ax = I then x1_inv is a solution to Ix = A
 def test_solve_1():
-    A = gen_matrix(100, 100, square=True)
+    A = gen_matrix(5, 5, square=True)
     I = np.identity(A.shape[0])
     X1 = np.linalg.solve(A, I)
     X2 = np.linalg.solve(I, A)
-    assert_matrix_equals(X1, np.linalg.inv(X2))
+    X2_inv = np.linalg.inv(X2)
+    assert_matrix_equals(X1, X2_inv)
+    return """Solution of Ax = I:\n{}\nSolution of Ix = A:\n{}\nInverse of solution to Ix = A:\n{}\n
+The solution to the first and inverse solution to the second are equal hence test passes""".format(X1, X2, X2_inv)
 
 # linalg.solve(Identity, random_vector) should give x = random_vector
 def test_solve_2():

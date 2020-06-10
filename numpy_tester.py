@@ -4,7 +4,7 @@ import sqrt_tests
 import trigonometry_tests
 
 # note in future needs to record and print number of failures and where
-def run_tests(module):
+def run_tests(module, show_examples=False):
     # get list of all test functions and their names in a module
     members = inspect.getmembers(module)
     test_functions = list(filter(lambda x: x[0][:5] == "test_", members))
@@ -21,10 +21,20 @@ def run_tests(module):
         except AssertionError as e:
             print("Fail: {}".format(e))
         else:
-            print("Pass")
+            print("Pass")       
+    if not show_examples: return
+    
+    # Loop through all functions and print the results of those with output
+    print("\n\nTest case examples")
+    for name, function in test_functions:
+        result = function()
+        if result is not None:
+            print("Example for {}".format(name))
+            print(result)
+            print()
     
 if __name__ == "__main__":
-    run_tests(linear_algebra_tests)
+    run_tests(linear_algebra_tests, show_examples=True)
     print()
     run_tests(sqrt_tests)
     print()
